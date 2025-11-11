@@ -22,7 +22,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public Produto get(@PathVariable Long id){
+    public Produto get(@PathVariable long id){
         Produto produto = produtoRepository.getById(id);
         return produto;
     }
@@ -34,7 +34,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto update(@PathVariable Long id, @RequestBody Produto produto){
+    public Produto update(@PathVariable long id, @RequestBody Produto produto){
         //Obtendo o produto pelo 'id' informado
         Produto produtoCadastrado = produtoRepository.getById(id);
 
@@ -44,11 +44,16 @@ public class ProdutoController {
         produtoCadastrado.setPreco(produto.getPreco());
         produtoCadastrado.setQtdeDisponivel(produto.getQtdeDisponivel());
         produtoCadastrado.setInformacoesAdicionais(produto.getInformacoesAdicionais());
-        produtoCadastrado.setFotos(produto.getFotos());
-        produtoCadastrado.setVendedor(produto.getVendedor());
+        //Atualizar fotos -- 'produtoCadastrado.setFotos(produto.getFotos());'
+        //Não se deve permitir a alteração do Vendedor -- 'produtoCadastrado.setVendedor(produto.getVendedor());'
 
         //Persistindo as alterações
         produtoRepository.save(produtoCadastrado);
         return produtoCadastrado;
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
+        produtoRepository.deleteById(id);
     }
 }
