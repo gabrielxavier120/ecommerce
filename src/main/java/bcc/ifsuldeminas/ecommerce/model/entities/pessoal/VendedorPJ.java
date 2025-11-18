@@ -1,8 +1,10 @@
 package bcc.ifsuldeminas.ecommerce.model.entities.pessoal;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-public class VendedorPJ extends Vendedor {
+@DiscriminatorValue(value = "VendedorPJ")
+public class VendedorPJ extends Vendedor{
     private long cnpj;
 }

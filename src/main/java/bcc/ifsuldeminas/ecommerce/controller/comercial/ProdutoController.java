@@ -2,6 +2,9 @@ package bcc.ifsuldeminas.ecommerce.controller.comercial;
 
 import bcc.ifsuldeminas.ecommerce.model.entities.comercial.Produto;
 import bcc.ifsuldeminas.ecommerce.model.repositories.comercial.ProdutoRepository;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,45 +18,50 @@ public class ProdutoController {
         this.produtoRepository = produtoRepository;
     }
 
+    //operacao create
     @PostMapping
-    public Produto create(@RequestBody Produto produto){
+    public Produto create(@RequestBody @Valid Produto produto){
         produtoRepository.save(produto);
         return produto;
     }
 
+    //operacoes read
     @GetMapping("/{id}")
-    public Produto get(@PathVariable long id){
-        Produto produto = produtoRepository.getById(id);
-        return produto;
+    public ResponseEntity<Produto> get(@PathVariable long id){
+        Produto produto = getById(id);
+        if(produto == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Produto>(produto, HttpStatus.OK);
     }
 
     @GetMapping
     public List<Produto> list(){
         List<Produto> produtos = produtoRepository.findAll();
+
         return produtos;
     }
 
+    //operacao update
     @PutMapping("/{id}")
-    public Produto update(@PathVariable long id, @RequestBody Produto produto){
-        //Obtendo o produto pelo 'id' informado
-        Produto produtoCadastrado = produtoRepository.getById(id);
+    public ResponseEntity<Produto> update(@PathVariable long id, @RequestBody @Valid Produto produto){
+        Produto produtoAux = produtoRepository.getById(id);
 
-        //Atualizando os dados do produto
-        produtoCadastrado.setNome(produto.getNome());
-        produtoCadastrado.setDescricao(produto.getDescricao());
-        produtoCadastrado.setPreco(produto.getPreco());
-        produtoCadastrado.setQtdeDisponivel(produto.getQtdeDisponivel());
-        produtoCadastrado.setInformacoesAdicionais(produto.getInformacoesAdicionais());
-        //Atualizar fotos -- 'produtoCadastrado.setFotos(produto.getFotos());'
-        //Não se deve permitir a alteração do Vendedor -- 'produtoCadastrado.setVendedor(produto.getVendedor());'
-
-        //Persistindo as alterações
-        produtoRepository.save(produtoCadastrado);
-        return produtoCadastrado;
+        produtoAux.setNome(produto.getNome());
+        produtoAux.setDescricao(produto.getDescricao());
+        produtoAux.setPreco(produto.getPreco());
+        produtoAux.setQtdeDisponivel(produto.getQtdeDisponivel());
+        produtoAux.setInformacoesAdicionais(produto.getInformacoesAdicionais());
+        //a implementar: atualizar fotos
+        //nao se deve alterar vendedor
+        produtoRepository.save(produtoAux);
+        return produtoAux;
     }
 
+    //operacao delete
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable long id){
         produtoRepository.deleteById(id);
     }
 }

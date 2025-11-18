@@ -1,30 +1,35 @@
 package bcc.ifsuldeminas.ecommerce.model.entities.comercial;
 
 import bcc.ifsuldeminas.ecommerce.model.entities.pessoal.Vendedor;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @NotNull
+    @NotBlank
     private String nome;
+    @NotNull
     private String descricao;
+    @NotNull
+    @DecimalMin(value="0.01")
     private double preco;
+    @NotNull
     private int qtdeDisponivel;
+    @NotNull
     private String informacoesAdicionais;
     private byte[] fotos;
+    @ManyToOne
     private Vendedor vendedor;
 
-    //Construtor padrão
     public Produto(){
 
     }
-
-    //Getter's e Setter's
 
     public long getId() {
         return id;

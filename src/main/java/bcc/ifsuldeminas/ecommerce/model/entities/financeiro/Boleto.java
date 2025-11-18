@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Boleto extends FormaDePagamento {
+@DiscriminatorValue(value = "Boleto")
+public class Boleto extends FormaDePagamento{
     private String codigo;
     @Temporal(TemporalType.DATE)
     private Date vencimento;
@@ -13,5 +14,6 @@ public class Boleto extends FormaDePagamento {
     private long numeroDoDocumento;
     @Temporal(TemporalType.DATE)
     private Date dataProcessamento;
+    @ManyToOne
     private Beneficiario beneficiario;
 }
